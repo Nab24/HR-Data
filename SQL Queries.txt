@@ -1,0 +1,63 @@
+show databases;
+create database MyHR;
+Use myhr;
+select * from hrdata;
+
+Employee Count:
+SELECT COUNT(*) FROM hrdata;
+SELECT * FROM hrdata WHERE education = 'High School';
+SELECT * FROM hrdata WHERE department = 'Sales';
+SELECT * FROM hrdata WHERE education_field = 'Marketing';
+SELECT * FROM hrdata WHERE education_field = 'Marketing' and education = 'High School';
+
+
+Attrition Count:
+select count(attrition) from hrdata where attrition='Yes';
+select count(attrition) from hrdata where attrition='Yes' and department = 'Sales' and education = 'High_school';
+
+
+Attrition Rate:
+SELECT ROUND(((SELECT COUNT(attrition) FROM hrdata WHERE attrition = 'Yes') / SUM(employee_count) * 100), 2) as attrition_rate;
+
+Active Employee:
+select sum(employee_count) - (select count(attrition) from hrdata  where attrition='Yes') from hrdata;
+
+
+Average Age:
+select round(avg(age),0) as Avg_age from hrdata;
+
+
+Attrition by Gender:
+select gender, count(attrition) as attrition_count from hrdata where attrition='Yes' group by gender order by count(attrition) desc;
+
+
+Department wise Attrition:
+select department, count(attrition) where attrition='Yes' group by department order by count(attrition) desc;
+
+select department, count(attrition), round((cast (count(attrition) as numeric) / 
+(select count(attrition) from hrdata where attrition= 'Yes')) * 100, 2) as pct from hrdata
+where attrition='Yes'
+group by department 
+order by count(attrition) desc;
+
+No of Employee by Age Group:
+SELECT age,  sum(employee_count) AS employee_count FROM hrdata
+GROUP BY age
+order by age;
+
+Education Field wise Attrition:
+select education_field, count(attrition) as attrition_count from hrdata
+where attrition='Yes'
+group by education_field
+order by count(attrition) desc;
+
+Attrition Rate by Gender for different Age Group:
+select age_band, gender, count(attrition) as attrition, round((cast(count(attrition) as numeric) / (select count(attrition) from hrdata where attrition = 'Yes')) * 100,2) as pct
+from hrdata where attrition = 'Yes'
+group by age_band, gender
+order by age_band, gender desc;
+
+
+
+
+
